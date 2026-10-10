@@ -9,7 +9,7 @@ MAX_FULL_SUBSTITUTIONS = 1_000_000
 def fullSub(password):
     """Generate substitutions, refusing empty input and excessive output."""
     if not isinstance(password, str) or not password:
-        raise ValueError("password must not be empty")
+        raise ValueError("password must be a non-empty string")
 
     letters = [subDict.get(char, [char]) for char in password]
     count = 1
@@ -25,8 +25,8 @@ def fullSub(password):
 
 #returns a list of possible passwords by replacing the first letter with common substitutions and appending numbers and letters to the end.  If numbers flag is set then append numbers to end
 def basicSub(password, numbers=False):
-    if not password:
-        raise ValueError("password must not be empty")
+    if not isinstance(password, str) or not password:
+        raise ValueError("password must be a non-empty string")
 
     if numbers:
         characterList = [

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import sys
 import pyperclip
 from substitute import fullSub
 from substitute import basicSub
@@ -18,7 +17,7 @@ def writePasswordsToClipboard(passwords):
 	pyperclip.copy(pwList)
 
 def writePasswordsToFile(outputFile, passwords):
-    with open(outputFile, 'w') as f:
+    with open(outputFile, 'w', encoding='utf-8') as f:
         f.write('\n'.join(passwords) + '\n')
     print('%s passwords written to %s' % (len(passwords), outputFile))
 

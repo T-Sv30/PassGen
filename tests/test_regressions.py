@@ -8,6 +8,12 @@ class RegressionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     generator("")
 
+    def test_non_string_input_rejected(self):
+        for generator in (fullSub, basicSub, appendNumbers):
+            with self.subTest(generator=generator.__name__):
+                with self.assertRaises(ValueError):
+                    generator(123)
+
     def test_uppercase_and_nonletters(self):
         self.assertIn("Password1", basicSub("Password"))
         self.assertTrue(all(item.startswith("1") for item in basicSub("123test")))
