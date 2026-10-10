@@ -8,7 +8,7 @@ def fullSub(password):
 	letters = []
 	#place substitution sets into the letters array
 	for val in password:
-		if val in subDict.keys():
+		if val in list(subDict.keys()):
 			letters.append(subDict[val])
 		else:
 			letters.append(val)
