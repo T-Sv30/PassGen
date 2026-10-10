@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.backup/
+.test-py3/
+*.py3
+*.pre-*
