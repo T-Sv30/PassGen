@@ -4,28 +4,38 @@ from lists import dummyCharacters
 from lists import numbersOnly
 
 #returns the cartesian product of all replaceable characters 
+MAX_FULL_SUBSTITUTIONS = 1_000_000
+
 def fullSub(password):
-	letters = []
-	#place substitution sets into the letters array
-	for val in password:
-		if val in list(subDict.keys()):
-			letters.append(subDict[val])
-		else:
-			letters.append(val)
-	# return list(product(*letters))
-	return [''.join(item) for item in product(*letters)]
+    """Generate substitutions, refusing empty input and excessive output."""
+    if not isinstance(password, str) or not password:
+        raise ValueError("password must not be empty")
+
+    letters = [subDict.get(char, [char]) for char in password]
+    count = 1
+    for choices in letters:
+        count *= len(choices)
+        if count > MAX_FULL_SUBSTITUTIONS:
+            raise ValueError(
+                f"full substitution would generate more than "
+                f"{MAX_FULL_SUBSTITUTIONS:,} candidates; use a shorter input"
+            )
+
+    return ["".join(item) for item in product(*letters)]
 
 #returns a list of possible passwords by replacing the first letter with common substitutions and appending numbers and letters to the end.  If numbers flag is set then append numbers to end
 def basicSub(password, numbers=False):
     if not password:
         raise ValueError("password must not be empty")
 
-    numCombos = [
-        ''.join(p)
-        for n in range(1, 5)
-        for p in product(numbersOnly, repeat=n)
-    ]
-    characterList = numCombos if numbers else dummyCharacters
+    if numbers:
+        characterList = [
+            ''.join(p)
+            for n in range(1, 5)
+            for p in product(numbersOnly, repeat=n)
+        ]
+    else:
+        characterList = dummyCharacters
     passwords = []
 
     first = password[0]

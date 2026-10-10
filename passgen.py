@@ -25,25 +25,24 @@ def writePasswordsToFile(outputFile, passwords):
 parser = argparse.ArgumentParser()
 
 if __name__ == '__main__':
-	parser.add_argument("-o", "--outputFile", help="The file that the password list will be written to.")
-	parser.add_argument("-f", "--full", help="Full password list flag.  This can generate a very large password", action="store_true")
-	parser.add_argument("-c", "--copy", help="Copy password list result to the clipboard.", action="store_true")
-	parser.add_argument("-n", "--numbers", help="Append numbers flag.", action="store_true")
-	parser.add_argument("password",nargs="*")
+	output_group = parser.add_mutually_exclusive_group()
+	output_group.add_argument("-o", "--outputFile", help="Write the candidate list to a UTF-8 file.")
+	output_group.add_argument("-c", "--copy", help="Copy the candidate list to the clipboard.", action="store_true")
+	mode_group = parser.add_mutually_exclusive_group()
+	mode_group.add_argument("-f", "--full", help="Generate all character substitutions (maximum 1,000,000 candidates).", action="store_true")
+	mode_group.add_argument("-n", "--numbers", help="Append numeric suffixes.", action="store_true")
+	parser.add_argument("password", help="Input word; quote it if it contains spaces")
 	args = parser.parse_args()
 
-	if not args.password:
-	    parser.error('provide a password word to generate variations')
-
-	password = args.password[0]
-
-	#load full or basic password list based on arguments passed in
-	if args.full:
-		passwords = fullSub(password)
-	elif args.numbers:
-		passwords = appendNumbers(password)
-	else:
-		passwords = basicSub(password)
+	try:
+		if args.full:
+			passwords = fullSub(args.password)
+		elif args.numbers:
+			passwords = appendNumbers(args.password)
+		else:
+			passwords = basicSub(args.password)
+	except ValueError as exc:
+		parser.error(str(exc))
 
 	#save passwords to file
 	if args.outputFile != None:
