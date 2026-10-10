@@ -34,6 +34,7 @@ def basicSub(password, numbers=False):
     # Preserve uppercase when the original first character is uppercase.
     if first.isupper():
         substitutions = [item.upper() for item in substitutions]
+    substitutions = list(dict.fromkeys(substitutions))
 
     middle = password[1:]
     replacements = product(substitutions, characterList)

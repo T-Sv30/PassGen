@@ -1,25 +1,27 @@
-import sys
 import os
+import tempfile
 import unittest
-import pyperclip
-from passgen import writePasswordsToClipboard
-from passgen import writePasswordsToFile
+from unittest.mock import patch
+
+from passgen import writePasswordsToClipboard, writePasswordsToFile
+
 
 class PasswordOutputTest(unittest.TestCase):
+    passwords = ["password1", "password2", "password3"]
+    password_data = "password1\npassword2\npassword3\n"
 
-  passwords = ['password1', 'password2', 'password3']
-  passwordData = 'password1\npassword2\npassword3'
-  fileName = 'test_passwords.txt'
-  def test_write_to_file(self):
-    writePasswordsToFile('test_passwords.txt',self.passwords)
-    with open('test_passwords.txt', 'r') as myfile:
-      data=myfile.read()
-      self.assertEqual(data,self.passwordData)
+    def test_write_to_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            filename = os.path.join(tmp, "passwords.txt")
+            writePasswordsToFile(filename, self.passwords)
+            with open(filename, encoding="utf-8") as handle:
+                self.assertEqual(handle.read(), self.password_data)
 
-  def test_write_to_clipboard(self):
-    writePasswordsToClipboard(self.passwords)
-    self.assertEqual(pyperclip.paste(), self.passwordData)
+    @patch("passgen.pyperclip.copy")
+    def test_write_to_clipboard(self, copy):
+        writePasswordsToClipboard(self.passwords)
+        copy.assert_called_once_with(self.password_data.rstrip("\n"))
 
-  @classmethod
-  def tearDownClass(self):
-    os.remove(self.fileName)
+
+if __name__ == "__main__":
+    unittest.main()
