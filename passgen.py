@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import sys
-import getopt
 import pyperclip
 from substitute import fullSub
 from substitute import basicSub

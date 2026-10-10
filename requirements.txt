@@ -1,1 +1,1 @@
-pyperclip\n
+pyperclip
