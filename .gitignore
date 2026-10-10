@@ -1,1 +1,2 @@
 __pycache__/\n*.py[cod]\n.venv/\n.backup/\n.test-py3/\n*.py3\n*.pre-*\n.DS_Store\n
+.DS_Store
