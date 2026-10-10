@@ -11,7 +11,15 @@ def fullSub(password):
     if not isinstance(password, str) or not password:
         raise ValueError("password must be a non-empty string")
 
-    letters = [subDict.get(char, [char]) for char in password]
+    letters = []
+    for char in password:
+        choices = subDict.get(char.lower(), [char]) if char.isupper() else subDict.get(char, [char])
+        if char.isupper():
+            choices = list(dict.fromkeys(
+                item.upper() if item.isalpha() else item
+                for item in choices
+            ))
+        letters.append(choices)
     count = 1
     for choices in letters:
         count *= len(choices)

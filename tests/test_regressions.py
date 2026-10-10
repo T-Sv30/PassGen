@@ -23,6 +23,12 @@ class RegressionTests(unittest.TestCase):
         values = basicSub("password")
         self.assertEqual(len(values), len(set(values)))
 
+    def test_full_sub_uppercase_preserved_and_unique(self):
+        values = fullSub("S")
+        self.assertEqual(values, ["S", "$", "5"])
+        self.assertEqual(len(values), len(set(values)))
+        self.assertEqual(fullSub("A"), ["A", "@", "4"])
+
     def test_full_substitution_cap(self):
         with self.assertRaisesRegex(ValueError, "shorter input"):
             fullSub("abcdefghijklmno")
